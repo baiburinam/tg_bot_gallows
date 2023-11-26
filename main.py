@@ -23,11 +23,23 @@ def start_bot(message):
 
 @bot.message_handler(commands=['help'])
 def help_bot(message):
-    bot.send_message(message.from_user.id, "Буква 'е' и буква 'ё' - разные буквы.\n")
+    bot.send_message(message.from_user.id, f"{message.from_user.first_name}, привет!\nЯ телеграм-бот, "
+                                           f"с которым можно поиграть в виселицу.\nЧтобы начать игру, пишите /game.\n"
+                                           "Чтобы посмотреть результаты своих игр, пиши /result\n"
+                                           "Чтобы посмотреть рейтинг всех игроков, пиши /rating\n"
+                                           "\nПравила игры:\n"
+                                           "Бот загадывает слово. Вам будет известно количество букв в загаданном "
+                                           "слове.\n"
+                                           "Далее в каждом сообщении вы можете писать букву, которая, как вам кажется, "
+                                           "может быть в загаданном слове. После каждой попытки бот скажет вам, "
+                                           "правильно или неправильно угадана буква.\n"
+                                           "Будьте внимательны: буква 'е' и буква 'ё' - разные буквы.\n"
+                                           "Ваша задача - отгадать слово за 8 попыток, пока человечек не будет "
+                                           "подвешен.")
 
 
 @bot.message_handler(commands=['game'])
-def help_bot(message):
+def play_bot(message):
     game = Game()
 
     if all_users.get(message.from_user.id) is None:
@@ -45,7 +57,7 @@ def help_bot(message):
 
 
 @bot.message_handler(commands=['group'])
-def help_bot(message):
+def group_bot(message):
     bot.send_message(message.from_user.id, 'look for a gamer')
 
 
@@ -54,10 +66,9 @@ def show_result(message):
     cur_id = message.from_user.id
 
     if not (id_check(str(cur_id), results)):
-        bot.send_message(cur_id, "Вы еще ни разу не играли со мной. Хотите попробовать?\n"
-                                               "Тогда пишите \game.")
+        bot.send_message(cur_id, "Вы еще ни разу не играли со мной. Хотите попробовать?\nТогда пишите \game.")
     else:
-        bot.send_message(cur_id, f"Вы выйграли {results[str(cur_id)].win} игр из {results[str(cur_id)].game}.\n")
+        bot.send_message(cur_id, f"Вы выиграли {results[str(cur_id)].win} игр из {results[str(cur_id)].game}.\n")
 
 
 @bot.message_handler(commands=['rating'])
@@ -102,7 +113,7 @@ def play_game(message):
 
             bot.send_message(cur_id, f"Поздравляю! Вы отгадали слово '{all_users[cur_id].hide_word}'.\n"
                                      f"Чтобы начать снова, пишите /game.\n"
-                                     f"Вы выйграли {results[str(cur_id)].win} игр из {results[str(cur_id)].game}.\n"
+                                     f"Вы выиграли {results[str(cur_id)].win} игр из {results[str(cur_id)].game}.\n"
                                      f"Буду ждать вас на новой игре!")
         else:
             bot.send_message(cur_id, f"Так держать! Вы отгадали букву {text}."
@@ -125,7 +136,7 @@ def play_game(message):
 
             bot.send_message(cur_id, f"Такой буквы в {all_users[cur_id].hide_word} нет. У вас закончились попытки."
                                      f"\nЗагаданное слово: {all_users[cur_id].key_word}.\n"
-                                     f"Вы выйграли {results[str(cur_id)].win} игр из {results[str(cur_id)].game}.\n"
+                                     f"Вы выиграли {results[str(cur_id)].win} игр из {results[str(cur_id)].game}.\n"
                                      f"Чтобы начать снова, пишите /game.\n"
                                      f"Буду рада снова поиграть с вами!")
 
