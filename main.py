@@ -3,7 +3,6 @@ import random
 import telebot
 
 from src.class_game import Game
-from src.my_token import token
 from src.utils import *
 
 all_words = open_txt(os.path.join('src', 'bank_of_words.txt'))
@@ -12,7 +11,7 @@ all_users = {}
 
 results = make_results()
 
-bot = telebot.TeleBot(token)
+bot = telebot.TeleBot(os.getenv("BOT_TOKEN"))
 
 
 @bot.message_handler(commands=['start'])
