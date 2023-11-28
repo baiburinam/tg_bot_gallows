@@ -1,4 +1,5 @@
 import random
+
 import telebot
 
 from src.class_game import Game
