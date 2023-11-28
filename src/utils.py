@@ -91,3 +91,4 @@ def cur_name_define(first_name, second_name):
     else:
         cur_name = first_name + " " + second_name
     return cur_name
+
