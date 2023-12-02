@@ -4,6 +4,14 @@ import os
 from src.class_result import Result
 
 
+def check_str(cur_str):
+    for smb in cur_str:
+        if not ('а' <= smb <= 'я'):
+            return False
+
+    return True
+
+
 def open_txt(file_name):
     with open(file_name, 'r', encoding='UTF-8') as file:
         return file.read().splitlines()
