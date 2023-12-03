@@ -54,8 +54,12 @@ def group_command(message):
             cur_text += str(step) + '.' + ' ' + item[1].name + '\n'
             step += 1
 
-    bot.send_message(message.from_user.id, cur_text)
-    bot.send_message(message.from_user.id, "Чтобы загадать слово одному из других пользователей, напиши мне "
+    if cur_text == "":
+        bot.send_message(message.from_user.id, "К сожалению, кроме тебя со мной никто не играл и ты не сможешь "
+                                               "загадать другому пользователю слово.")
+    else:
+        bot.send_message(message.from_user.id, cur_text)
+        bot.send_message(message.from_user.id, "Чтобы загадать слово одному из других пользователей, напиши мне "
                                            "следующим сообщением его номер в списке и загаданное тобой слово.\n"
                                            "Например: 1 крокодил.\nПосле игры я напишу тебе ее результат.")
 
@@ -69,8 +73,7 @@ def play_bot(message):
     else:
         all_users[message.from_user.id] = game
 
-    results[str(message.from_user.id)].game_on = True
-    print(results[str(message.from_user.id)].game_on)
+    all_users[message.from_user.id].game_on = True
 
     game.key_word = random.choice(all_words)
     game.hide_word = "*" * len(game.key_word)
@@ -105,7 +108,7 @@ def show_rating(message):
 
 @bot.message_handler(content_types=['text'])
 def play_game(message):
-    if results[str(message.from_user.id)].game_on:
+    if all_users[message.from_user.id].game_on:
         cur_id = message.from_user.id
 
         text = message.text
@@ -127,9 +130,8 @@ def play_game(message):
             if all_users[cur_id].hide_word.count('*') == 0:
                 cur_name = cur_name_define(message.from_user.first_name, message.from_user.last_name)
 
+                all_users[cur_id].game_on = False
                 end_game(cur_id, cur_name, True, results)
-
-                results[str(cur_id)].game_on = False
 
                 if all_users[message.from_user.id].group != 0:
                     bot.send_message(all_users[message.from_user.id].group, f"Пользователь {cur_name} отгадал(а) слово"
@@ -158,9 +160,9 @@ def play_game(message):
             else:
                 cur_name = cur_name_define(message.from_user.first_name, message.from_user.last_name)
 
-                end_game(cur_id, cur_name, False, results)
+                all_users[cur_id].game_on = False
 
-                results[str(cur_id)].game_on = False
+                end_game(cur_id, cur_name, False, results)
 
                 if all_users[message.from_user.id].group != 0:
                     bot.send_message(all_users[message.from_user.id].group, f"Пользователь {cur_name} не отгадал(а)"
@@ -203,7 +205,7 @@ def play_game(message):
             game = Game()
 
             all_users[player_id] = game
-            results[str(player_id)].game_on = True
+            all_users[player_id].game_on = True
 
             game.key_word = inf[1]
             game.hide_word = "*" * len(game.key_word)
