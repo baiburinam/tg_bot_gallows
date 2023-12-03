@@ -3,5 +3,4 @@ class Result:
         self.name = ''
         self.win = 0
         self.game = 0
-        self.game_on = False
 
